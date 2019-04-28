@@ -1,0 +1,169 @@
+<include file="./Application/Admin/View/public/header.html" title="自动点控列表" />
+    <body>
+        <include file="./Application/Admin/View/public/nav.html"  />
+        <div class="wrapper">
+            <div class="container" style="width: 95%">
+                <div class="row">
+                    <include file="./Application/Admin/View/public/left.html"  />
+                    <!--/.span3-->
+                    <div class="span9" style="width: 82%">
+                        <div class="content">
+                        <div class="module">
+							<div class="module-head">
+								<h3>自动点控列表</h3>
+							</div>
+							<div class="module-body table">
+                                <div style="margin-left: 15px">
+                                说明：<br>
+                                <span style="color: red">1.当日上过分的玩家</span><br>
+                                <span style="color: red">2.点控完成时间在N（自然日）天之前，或未点控过的玩家</span><br>
+                                <span style="color: red">3.总上分/总输赢>-10且<0的玩家</span><br>
+                                    <span style="color: red">注：自动点控每3小时执行一次，修改配置将在下次执行时生效，若想立即生效则点击：</span><a href="__URL__/do_auto_ctrl" ID="go_auto">立即生效</a><br><br>
+                                </div>
+
+
+                                <form method="get" action="__URL__/auto_ctrl_update" name="player_list" style="margin-left: 10px">
+                                    点控开关：
+                                    <select  name="flag">
+                                        <if condition="$cnf[0][flag] eq 1">
+                                            <option value="1"  selected = "selected">开</option>
+                                            <option value="0">关</option>
+                                            <else/>
+                                            <option value="1">开</option>
+                                            <option value="0" selected = "selected">关</option>
+                                        </if>
+                                    </select>
+
+                                    点控完成自然日：
+                                    <input type="number" value="{$cnf[0][daynum]}" name="daynum" style="width: 100px"/>
+
+                                    系数X：
+                                    <input type="text" value="{$cnf[0][x]|round=###,2}" name="x" style="width: 100px"/>
+                                    作弊率：
+                                    <input type="number" value="{$cnf[0][cheat]}" name="cheat" style="width: 100px"/>
+                                    自然日输赢限制：
+                                    <input type="number" value="{$cnf[0][winlimit]}" name="winlimit" style="width: 100px"/>
+
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="修改"/>
+
+                                </form>
+								<table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+									<thead>
+										<tr>
+											<th>玩家ID</th>
+                                            <th>总输赢</th>
+                                            <th>总上分</th>
+                                            <th>近N日输赢</th>
+                                            <th>点控完成时间</th>
+
+                                        </tr>
+									</thead>
+									<tbody>
+
+                                    <notempty name="data">
+                                    <foreach name="data" item="vo">                                    <tr >
+
+                                        <if condition="$Think.session.power.link_user eq 1">
+                                            <td><a href="__URL__/player_list?detail_id={$vo.userid}" class="userids">{$vo.userid}</a></td>
+
+                                            <else/>
+                                            <td>{$vo.userid}</td>
+                                        </if>
+                                        <td>{$vo.realscore}</td>
+                                        <td>{$vo.sumbuy}</td>
+                                        <td>{$vo.sum3win}</td>
+                                        <td>{$vo.endcheatdate}</td>
+
+
+                                    </tr>
+                                    </foreach>
+                                        <else/>
+                                        <td colspan="13">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+									</tbody>
+
+								</table>
+                                <form method="get" action="__URL__/get_buy_zero" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page}</div>
+							</div>
+						</div><!--/.module-->
+
+                           </div> 
+                        <!--/.content-->
+                        <!--<a class="btn btn-mini btn-info" href="add_admin">添加管理员</a>-->
+                    </div>
+                    <!--/.span9-->
+                    
+                   
+                </div>
+            </div>
+            <!--/.container-->
+        </div>
+
+        <div class="insure_tip" style="width: 400px; text-align: center; display: none; position: fixed;top:0;left: 40%; background-color: #fff; padding: 30px; border: #999999 2px solid;">
+
+            正在执行，请勿刷新页面。。。
+        </div>
+        <!--/.wrapper-->
+        <div class="footer">
+            <div class="container" style="width: 95%">
+                <b class="copyright">&copy; 2018 后台管理系统 - 技术支持RyanLiu </b> - 备案信息：xxxxxxxx号
+            </div>
+        </div>
+        <script src="__PUBLIC__/admin/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+
+        <script src="__PUBLIC__/admin/data/js/jquery.min.js"></script>
+        <script src="__PUBLIC__/admin/data/js/Ecalendar.jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+            $("#ECalendar_case1").ECalendar({
+                type:"date",
+                skin:"#233",
+                offset:[0,2]
+            });
+            $("#ECalendar_case2").ECalendar({
+                type:"date",
+                skin:"#233",
+                offset:[0,2]
+            });
+
+
+            $('#go_auto').click(function () {
+                $('.insure_tip').fadeIn(200).animate({top:'30%'},270);
+                $('.wrapper').animate({opacity:'0.5'},300);
+                $(this).css('display', 'none');
+            })
+
+
+            $(".userids").each(function(){
+                var a = $(this).text()
+                $(this).text(parseInt(a)+10000)
+            });
+
+
+
+
+        </script>
+
+        <script src="__PUBLIC__/admin/scripts/common.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/scripts/flot/jquery.flot.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/scripts/flot/jquery.flot.pie.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/admin/scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
+
+
+
+
+</body>

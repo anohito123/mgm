@@ -1,0 +1,345 @@
+<include file="./Application/Admin/View/public/header.html" title="一键查分" />
+    <body>
+        <include file="./Application/Admin/View/public/nav.html"  />
+        <div class="wrapper">
+            <div class="container" style="width: 95%">
+                <div class="row">
+                    <include file="./Application/Admin/View/public/left.html"  />
+                    <!--/.span3-->
+                    <div class="span9" style="width: 82%">
+                        <div class="content">
+                        <div class="module">
+							<div class="module-head">
+                                <h3>一键查分     玩家ID:<a href="__URL__/player_list?detail_id={$Think.session.all_userid}" class="userids" style="font-size: 18px">{$Think.session.all_userid}</a></h3>
+							</div>
+							<div class="module-body table">
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list">
+                                    <div class="case" style="padding-left: 15px; margin-bottom: 10px; font-size: 13px">
+                                        玩家ID：
+                                        <input type="number" name="p_userid"  style="width:150px;height:25px;"/>
+
+                                        <input type="submit" class="btn btn-mini btn-info godate" value="搜索玩家"/>
+                                    </div>
+                                </form>
+                                <div class="module-head">
+                                <h4>赠送记录：</h4>
+                                </div>
+								<table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+									<thead>
+										<tr>
+                                            <th>时间</th>
+											<th>赠送玩家ID</th>
+                                            <th>昵称</th>
+
+                                            <th>赠送金币</th>
+
+
+
+                                        </tr>
+									</thead>
+									<tbody>
+                                    <notempty name="data1">
+
+                                    <foreach name="data1" item="vo">                                    <tr >
+                                        <td>{$vo.changedate}</td>
+                                        <if condition="$Think.session.power.link_user eq 1">
+                                            <td><a href="__URL__/player_list?detail_id={$vo.userid2}" class="userids2">{$vo.userid2}</a></td>
+                                            <td><a href="__URL__/player_list?detail_id={$vo.userid2}">{$vo.r_nick_name}</a></td>
+                                            <else/>
+                                            <td>{$vo.userid}</td>
+                                            <td>{$vo.p_nick_name}</td>
+                                            <td>{$vo.userid2}</td>
+                                            <td>{$vo.r_nick_name}</td>
+                                        </if>
+
+
+                                        <td>{$vo.score}</td>
+
+
+
+                                    </tr>
+                                    </foreach>
+                                        <else/>
+                                        <td colspan="6">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+									</tbody>
+
+								</table>
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="hidden" name="p_userid" value="{$data[0].p_gid}"  />
+
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page1}</div>
+
+                                <div class="module-head">
+                                <h4>接收记录</h4>
+                                </div>
+                                <table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>接收玩家ID</th>
+                                        <th>昵称</th>
+                                        <th>接收金币</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <notempty name="data2">
+                                        <foreach name="data2" item="vo">                                    <tr >
+
+                                            <td>{$vo.changedate}</td>
+                                            <if condition="$Think.session.power.link_user eq 1">
+
+                                                <td><a href="__URL__/player_list?detail_id={$vo.userid}" class="userids">{$vo.userid}</a></td>
+                                                <td><a href="__URL__/player_list?detail_id={$vo.userid}">{$vo.p_nick_name}</a></td>
+                                                <else/>
+                                                <td>{$vo.userid}</td>
+                                                <td>{$vo.p_nick_name}</td>
+
+                                            </if>
+
+                                            <td>{$vo.score}</td>
+
+
+                                        </tr>
+                                        </foreach>
+                                        <else/>
+                                        <td colspan="6">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+                                    </tbody>
+
+                                </table>
+
+
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="hidden" name="r_userid" value="{$data[0].r_gid}"  />
+
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page2}</div>
+                                <div class="module-head">
+                                    <h4>保险柜存记录：</h4>
+                                </div>
+
+                                <table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>变动时间</th>
+
+                                        <th>变动前金币</th>
+                                        <th>变动金币</th>
+                                        <th>变动后金币</th>
+                                        <th>变动原因</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <notempty name="data3">
+                                        <foreach name="data3" item="vo">                             <tr>
+                                            <td>{$vo.logtime}</td>
+                                            <td>{$vo.preamount}</td>
+                                            <td>{$vo.amount}</td>
+                                            <td>{$vo.aftamount}</td>
+                                            <td>{$vo.reason}</td>
+
+
+                                        </tr>
+                                        </foreach>
+                                        <else/>
+                                        <td colspan="8">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+                                    </tbody>
+
+                                </table>
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="hidden" name="pid" value="{$data[0].user_id}"  />
+
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page3}</div>
+
+                                <div class="module-head">
+                                    <h4>保险柜取记录：</h4>
+                                </div>
+
+                                <table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>变动时间</th>
+
+                                        <th>变动前金币</th>
+                                        <th>变动金币</th>
+                                        <th>变动后金币</th>
+                                        <th>变动原因</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <notempty name="data4">
+                                        <foreach name="data4" item="vo">                             <tr>
+                                            <td>{$vo.logtime}</td>
+
+                                            <td>{$vo.preamount}</td>
+                                            <td>{$vo.amount}</td>
+                                            <td>{$vo.aftamount}</td>
+                                            <td>{$vo.reason}</td>
+
+
+                                        </tr>
+                                        </foreach>
+                                        <else/>
+                                        <td colspan="8">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+                                    </tbody>
+
+                                </table>
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="hidden" name="pid" value="{$data[0].user_id}"  />
+
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page4}</div>
+
+                                <div class="module-head">
+                                    <h4>游戏金币变动记录：</h4>
+                                </div>
+
+                                <table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>变动时间</th>
+                                        <th>变动前金币</th>
+                                        <th>变动金币</th>
+                                        <th>变动后金币</th>
+                                        <th>变动原因</th>
+                                        <th>游戏房间</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <notempty name="data5">
+                                        <foreach name="data5" item="vo">                             <tr>
+                                            <td>{$vo.logtime}</td>
+
+                                            <td>{$vo.preamount}</td>
+                                            <td>{$vo.amount}</td>
+                                            <td>{$vo.aftamount}</td>
+                                            <td>{$vo.reason}</td>
+                                            <td>{$vo.roomname}</td>
+
+
+                                        </tr>
+                                        </foreach>
+                                        <else/>
+                                        <td colspan="8">没有数据，请输入一个玩家ID！</td>
+                                    </notempty>
+
+                                    </tbody>
+
+                                </table>
+                                <form method="get" action="__URL__/player_presents_log_all" name="player_list" style="float: right;">
+                                    跳转到：
+                                    <input type="hidden" name="pid" value="{$data[0].user_id}"  />
+
+                                    <input type="number" name="p"  style="width:50px;height:20px;"/>
+
+                                    页
+                                    <input type="submit" class="btn btn-mini btn-info godate" value="跳转"/>
+
+                                </form> <div class="pages" style="">{$page5}</div>
+
+
+                                <div class="module-head">
+                                    <h4>游戏总金币变动记录：</h4>
+                                </div>
+                                <table cellpadding="0" cellspacing="0" border="0" class=" table table-bordered table-striped display" width="100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>房间</th>
+                                        <th>金币变化</th>
+                                        <th>房间总下注</th>
+                                        <th>最后记录时间</th>
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <notempty name="data6">
+
+                                        <foreach name="data6" item="vo">                                    <tr >
+
+                                            <td>{$vo.roomname}</td>
+                                            <td>{$vo.amount}</td>
+                                            <td>{$vo.sum_beton}</td>
+
+                                            <td>{$vo.last_time}</td>
+
+                                            <!--<td><a href="www.baidu.com" id="goback">撤回</a></td>-->
+
+                                        </tr>
+                                        </foreach>
+                                        <else/>
+                                        <td colspan="6">没有数据！</td>
+                                    </notempty>
+
+                                    </tbody>
+
+                                </table>
+                                <div class="pages" style="">{$page6}</div>
+
+
+							</div>
+						</div><!--/.module-->
+
+                           </div> 
+                        <!--/.content-->
+                        <!--<a class="btn btn-mini btn-info" href="add_admin">添加管理员</a>-->
+                    </div>
+                    <!--/.span9-->
+                    
+                   
+                </div>
+            </div>
+            <!--/.container-->
+        </div>
+        <!--/.wrapper-->
+         <include file="./Application/Admin/View/public/footer.html" name="管理员(请谨慎操作)？"/>
+      
+    </body>
